@@ -12,6 +12,8 @@ const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [error, setError] = useState('');
+
   const router = useRouter();
 
   const mutation = useMutation({
@@ -26,6 +28,9 @@ const AuthForm = () => {
     onSuccess: (response) => {
       localStorage.setItem('jwt', response.data.account.jwt);
       router.push('/dashboard');
+    },
+    onError: (error) => {
+      setError(error.message);
     },
   });
 
@@ -95,6 +100,7 @@ const AuthForm = () => {
                 'Sign In'
               )}
             </button>
+            {error && <p className='block text-sm font-medium text-red-700'>{error}</p>}
           </form>
         </div>
       </div>

@@ -35,6 +35,8 @@ const AuthForm = () => {
       } else {
         sessionStorage.setItem('jwt', response.data.account.jwt);
       }
+      updateEmail('');
+      updatePassword('');
 
       router.push('/dashboard');
     },
@@ -46,6 +48,10 @@ const AuthForm = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     mutation.mutate();
+  };
+
+  const disabled = () => {
+    return email == '' || password == '' || isLoading;
   };
 
   return (
@@ -102,7 +108,6 @@ const AuthForm = () => {
               <input
                 id='remember'
                 type='checkbox'
-                value=''
                 checked={remember}
                 className='w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
                 onChange={(e) => setRemember(e.target.checked)}
@@ -117,7 +122,7 @@ const AuthForm = () => {
 
             <button
               type='submit'
-              disabled={isLoading}
+              disabled={disabled()}
               className='w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:cursor-pointer hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
             >
               {isLoading ? (

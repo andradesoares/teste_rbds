@@ -6,8 +6,10 @@ const NavBar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('jwt');
+    sessionStorage.removeItem('jwt');
     router.push('/');
   };
+
   return (
     <div className='flex justify-between items-center px-12 py-4 bg-gray-200'>
       <span className='font-bold text-4xl'> Dashboard</span>

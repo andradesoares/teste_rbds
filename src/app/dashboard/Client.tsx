@@ -1,9 +1,24 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { redirect, useRouter } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
+import { useQuery } from '@tanstack/react-query';
+import { getUserById } from '@/queries/user';
+
+interface JwtPayload {
+  id: string;
+  email: string;
+  fullname: string;
+  active: boolean;
+  role: string;
+  iat: number;
+  exp: number;
+}
 
 const Client = () => {
   const router = useRouter();
+  const [user, setUser] = useState();
+  const [jwt, setJwt] = useState<JwtPayload>();
 
   useEffect(() => {
     const authToken = localStorage.getItem('jwt');
@@ -11,7 +26,18 @@ const Client = () => {
     if (!authToken) {
       redirect('/');
     }
+
+    const decoded = jwtDecode<JwtPayload>(authToken);
+    setJwt(decoded);
   }, []);
+
+  useQuery({
+    queryKey: ['userInfo'],
+    queryFn: async () => {
+      const data = await getUserById(jwt.id);
+      console.log(data);
+    },
+  });
 
   const handleLogout = () => {
     localStorage.removeItem('jwt');

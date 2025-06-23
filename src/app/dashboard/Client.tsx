@@ -1,46 +1,18 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '@/queries/user';
 import NavBar from '@/components/NavBar';
 import Loading from '@/components/Loading';
-
-interface JwtPayload {
-  id: string;
-  email: string;
-  fullname: string;
-  active: boolean;
-  role: string;
-  iat: number;
-  exp: number;
-}
+import useAuth from '@/hooks/use-auth';
 
 const Client = () => {
-  const [user, setUser] = useState();
-  const [jwt, setJwt] = useState<JwtPayload>();
-  const [loading, setLoading] = useState(true);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const authToken = localStorage.getItem('jwt') || sessionStorage.getItem('jwt');
-
-    if (!authToken) {
-      router.push('/');
-      return;
-    }
-
-    const decoded = jwtDecode<JwtPayload>(authToken);
-    setJwt(decoded);
-    setLoading(false);
-  }, []);
+  const { loading, userId } = useAuth();
 
   useQuery({
     queryKey: ['userInfo'],
     queryFn: async () => {
-      const data = await getUserById(jwt.id);
+      const data = await getUserById(userId);
       console.log(data);
     },
   });

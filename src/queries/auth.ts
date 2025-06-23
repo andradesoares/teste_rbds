@@ -22,9 +22,15 @@ export const login = async (credentials: {
     body: JSON.stringify(credentials),
   });
 
-  if (!response.ok) {
-    throw new Error('An error occurred');
+  if (response.status == 401 || response.status == 404) {
+    throw new Error('Incorrect Email/Password');
   }
 
-  return response.json();
+  const responseData = await response.json();
+
+  if (!responseData.data.active) {
+    throw new Error('User Inactive');
+  }
+
+  return responseData;
 };

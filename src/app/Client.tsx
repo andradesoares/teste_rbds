@@ -18,7 +18,7 @@ const Client = () => {
     setLoading(false);
   }, []);
 
-  return loading ? <Loading /> : <AuthForm />;
+  return <div className='w-full max-w-md'>{loading ? <Loading /> : <AuthForm />}</div>;
 };
 
 export default Client;

@@ -5,10 +5,14 @@ import { Eye, EyeOff } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 
 import { login } from '@/queries/auth';
+import { useFormStore } from '@/store';
 
 const AuthForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const email = useFormStore((state) => state.email);
+  const password = useFormStore((state) => state.password);
+  const updateEmail = useFormStore((state) => state.updateEmail);
+  const updatePassword = useFormStore((state) => state.updatePassword);
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
@@ -28,7 +32,10 @@ const AuthForm = () => {
     onSuccess: (response) => {
       if (remember) {
         localStorage.setItem('jwt', response.data.account.jwt);
+      } else {
+        sessionStorage.setItem('jwt', response.data.account.jwt);
       }
+
       router.push('/dashboard');
     },
     onError: (error) => {
@@ -60,7 +67,7 @@ const AuthForm = () => {
                   id='email'
                   name='email'
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => updateEmail(e.target.value)}
                   required
                   className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm'
                   placeholder='Enter your email'
@@ -77,7 +84,7 @@ const AuthForm = () => {
                   id='password'
                   name='password'
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => updatePassword(e.target.value)}
                   required
                   className='w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm'
                   placeholder='Enter your password'

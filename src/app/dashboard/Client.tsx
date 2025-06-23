@@ -25,7 +25,7 @@ const Client = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const authToken = localStorage.getItem('jwt');
+    const authToken = localStorage.getItem('jwt') || sessionStorage.getItem('jwt');
 
     if (!authToken) {
       router.push('/');

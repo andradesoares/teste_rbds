@@ -1,9 +1,11 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 import { useQuery } from '@tanstack/react-query';
 import { getUserById } from '@/queries/user';
+import NavBar from '@/components/NavBar';
+import Loading from '@/components/Loading';
 
 interface JwtPayload {
   id: string;
@@ -16,19 +18,23 @@ interface JwtPayload {
 }
 
 const Client = () => {
-  const router = useRouter();
   const [user, setUser] = useState();
   const [jwt, setJwt] = useState<JwtPayload>();
+  const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
 
   useEffect(() => {
     const authToken = localStorage.getItem('jwt');
 
     if (!authToken) {
-      redirect('/');
+      router.push('/');
+      return;
     }
 
     const decoded = jwtDecode<JwtPayload>(authToken);
     setJwt(decoded);
+    setLoading(false);
   }, []);
 
   useQuery({
@@ -39,22 +45,7 @@ const Client = () => {
     },
   });
 
-  const handleLogout = () => {
-    localStorage.removeItem('jwt');
-    router.push('/');
-  };
-
-  return (
-    <div className='flex'>
-      Dashboard
-      <button
-        onClick={handleLogout}
-        className='w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:cursor-pointer hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
-      >
-        Logout
-      </button>
-    </div>
-  );
+  return loading ? <Loading /> : <NavBar />;
 };
 
 export default Client;

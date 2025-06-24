@@ -6,7 +6,12 @@ import useAuth from '@/hooks/use-auth';
 
 const Client = () => {
   const { loading } = useAuth();
-  return <div className='w-full max-w-md'>{loading ? <Loading /> : <AuthForm />}</div>;
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  return <AuthForm />;
 };
 
 export default Client;

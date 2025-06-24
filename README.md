@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Teste React / Next.js - RBDS
+Este teste foi criado com o intuito de entender o nível técnico dos candidatos à vaga de Desenvolvedor Front-End Pleno e será utilizado nos critérios de avaliação dos mesmos.
 
-## Getting Started
+Sua Tarefa
+O desenvolvedor deve criar, utilizando React, um fluxo de autenticação simples. O uso de bibliotecas plug and play para autenticação não será permitido, portanto, o candidato deve criar o fluxo manualmente, utilizando seus próprios conhecimentos e experiência.
 
-First, run the development server:
+Sobre a API para Auth
+A URL que deve ser utilizada para desenvolver o fluxo de login: https://1q8k0qzkxe.execute-api.us-east-1.amazonaws.com/dev/auth/login
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Exemplo de Request Payload (JSON):
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+{
+  "email": "...",
+  "password": "..."
+}
+Exemplo de Resposta (Success):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+{
+  "success": true,
+  "data": {
+    "id": "clpu61dvn0000umkgbav276ez",
+    "email": "teste-dev@rbds.org.br",
+    "fullname": "Conta Teste Dev",
+    "active": true,
+    "role": "STAFF",
+    "account": {
+      "jwt": "..."
+    }
+  }
+}
+Para obter os dados do usuário, utilize a seguinte URL: https://1q8k0qzkxe.execute-api.us-east-1.amazonaws.com/dev/users/{user_id}
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Requisitos
+Seu fluxo de autenticação deve permitir usuários ativos e negar usuários desativados.
+Deve ser possível fazer logout.
+O JWT retornado deve persistir de alguma forma, mantendo o usuário logado caso ele atualize a página.
+Deve ser possível utilizar os dados/campos do usuário de forma global, ou seja, tanto dentro dos componentes React quanto fora.
+UI/UX simples e clean utilizando TailwindCSS.
+Utilizar React Query / Tanstack Query.
+Código limpo e organizado.
+Caso seja identificado o uso de AI, o candidato será desqualificado imediatamente.
+Prazo
+2 dias a partir do momento que o candidato avisar sobre o start do teste (via WhatsApp ou email).
 
-## Learn More
+Como envio meu código para avaliação?
+Basta subir o código no GitHub e enviar o link por email para jean@rbds.org.br
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Boa sorte!

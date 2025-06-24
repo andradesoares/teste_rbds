@@ -1,14 +1,4 @@
-export interface UserResponse {
-  success: boolean;
-  data: {
-    active: boolean;
-    email: string;
-    externalUserId: string | null;
-    fullname: string;
-    id: string;
-    role: string;
-  };
-}
+import { UserResponse } from '@/lib/types';
 
 export const getUserById = async (user_id: string, jwt: string): Promise<UserResponse> => {
   if (!user_id || !jwt) {

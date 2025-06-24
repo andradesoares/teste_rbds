@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Eye, EyeOff } from 'lucide-react';
 import { useMutation } from '@tanstack/react-query';
 
-import { login } from '@/queries/auth';
+import { login } from '@/api/auth';
 import { useFormStore } from '@/store';
 
 const AuthForm = () => {
@@ -13,16 +13,13 @@ const AuthForm = () => {
   const updateEmail = useFormStore((state) => state.updateEmail);
   const updatePassword = useFormStore((state) => state.updatePassword);
 
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
-  const [error, setError] = useState('');
 
   const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: async () => {
-      setIsLoading(true);
       return await login({ email, password });
     },
     onSuccess: (response) => {
@@ -33,14 +30,8 @@ const AuthForm = () => {
       }
       updateEmail('');
       updatePassword('');
-      setIsLoading(false);
 
       router.push('/dashboard');
-    },
-    onError: (error) => {
-      setIsLoading(false);
-
-      setError(error.message);
     },
   });
 
@@ -50,19 +41,19 @@ const AuthForm = () => {
   };
 
   const disabled = () => {
-    return email == '' || password == '' || isLoading;
+    return email == '' || password == '' || mutation.isPending;
   };
 
   return (
     <div className='bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8'>
       <div className='text-center mb-8'>
         <h1 className='text-3xl font-bold text-gray-800 mb-2'>Welcome Back</h1>
-        <p className='text-gray-600'>Sign in to your account to continue</p>
+        <p className='text-gray-600'>Sign in to continue</p>
       </div>
       <form onSubmit={handleSubmit} className='space-y-6'>
         <div className='space-y-2'>
           <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
-            Email Address
+            Email
           </label>
           <div className='relative'>
             <input
@@ -72,7 +63,7 @@ const AuthForm = () => {
               value={email}
               onChange={(e) => updateEmail(e.target.value)}
               required
-              className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm'
+              className='w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg '
               placeholder='Enter your email'
             />
           </div>
@@ -89,7 +80,7 @@ const AuthForm = () => {
               value={password}
               onChange={(e) => updatePassword(e.target.value)}
               required
-              className='w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white/50 backdrop-blur-sm'
+              className='w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg'
               placeholder='Enter your password'
             />
             <button
@@ -106,7 +97,7 @@ const AuthForm = () => {
             id='remember'
             type='checkbox'
             checked={remember}
-            className='w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
+            className='w-4 h-4 border border-gray-300 rounded-sm bg-gray-50 '
             onChange={(e) => setRemember(e.target.checked)}
           />
           <label
@@ -116,15 +107,16 @@ const AuthForm = () => {
             Remember me
           </label>
         </div>
-
         <button
           type='submit'
           disabled={disabled()}
-          className='w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-4 rounded-lg font-semibold hover:from-blue-700 hover:cursor-pointer hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5'
+          className='w-full bg-blue-600 hover:bg-blue-400 px-6 py-2 rounded-xl hover:cursor-pointer text-white disabled:opacity-50 disabled:hover:bg-blue-600'
         >
-          {isLoading ? 'Signing In...' : 'Sign In'}
+          {mutation.isPending ? 'Signing In...' : 'Sign In'}
         </button>
-        {error && <p className='block text-sm font-medium text-red-700'>{error}</p>}
+        {mutation.isError && (
+          <p className='block text-sm font-medium text-red-700'>{mutation.error.message}</p>
+        )}
       </form>
     </div>
   );

@@ -2,16 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
-
-interface JwtPayload {
-  id: string;
-  email: string;
-  fullname: string;
-  active: boolean;
-  role: string;
-  iat: number;
-  exp: number;
-}
+import { JwtPayload } from '@/lib/types';
 
 const useAuth = () => {
   const [loading, setLoading] = useState(true);
@@ -28,9 +19,12 @@ const useAuth = () => {
       router.push('/');
       return;
     }
+
     setjwt(authToken);
     const decoded = jwtDecode<JwtPayload>(authToken);
+
     setUserId(decoded.id);
+
     setLoading(false);
 
     router.push('/dashboard');

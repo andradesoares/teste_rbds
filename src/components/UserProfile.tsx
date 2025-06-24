@@ -1,14 +1,4 @@
-'use client';
-import React from 'react';
-
-interface User {
-  active: boolean;
-  email: string;
-  externalUserId: string | null;
-  fullname: string;
-  id: string;
-  role: string;
-}
+import { User } from '@/lib/types';
 
 const UserProfile = ({ user }: { user: User }) => {
   return (

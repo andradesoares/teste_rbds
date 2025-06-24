@@ -1,24 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { jwtDecode } from 'jwt-decode';
 
-import { getUserById } from '@/queries/user';
+import { getUserById } from '@/api/user';
 import NavBar from '@/components/NavBar';
 import Loading from '@/components/Loading';
 import useAuth from '@/hooks/use-auth';
 import UserProfile from '@/components/UserProfile';
-
-interface JwtPayload {
-  id: string;
-  email: string;
-  fullname: string;
-  active: boolean;
-  role: string;
-  iat: number;
-  exp: number;
-}
 
 const Client = () => {
   const { userId, jwt } = useAuth();

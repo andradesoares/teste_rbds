@@ -1,14 +1,4 @@
-export interface AuthResponse {
-  success: boolean;
-  data: {
-    id: string;
-    email: string;
-    fullname: string;
-    active: boolean;
-    role: string;
-    account: { jwt: string };
-  };
-}
+import { AuthResponse } from '@/lib/types';
 
 export const login = async (credentials: {
   email: string;

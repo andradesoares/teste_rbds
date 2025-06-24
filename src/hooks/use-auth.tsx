@@ -16,7 +16,7 @@ interface JwtPayload {
 const useAuth = () => {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState('');
-
+  const [jwt, setjwt] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const useAuth = () => {
       router.push('/');
       return;
     }
-
+    setjwt(authToken);
     const decoded = jwtDecode<JwtPayload>(authToken);
     setUserId(decoded.id);
     setLoading(false);
@@ -36,7 +36,7 @@ const useAuth = () => {
     router.push('/dashboard');
   }, []);
 
-  return { loading, userId };
+  return { loading, userId, jwt };
 };
 
 export default useAuth;

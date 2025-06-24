@@ -31,12 +31,5 @@ export interface AuthResponse {
 
 export interface UserResponse {
   success: boolean;
-  data: {
-    active: boolean;
-    email: string;
-    externalUserId: string | null;
-    fullname: string;
-    id: string;
-    role: string;
-  };
+  data: User;
 }
